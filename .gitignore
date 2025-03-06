@@ -8,3 +8,6 @@ secrets.toml
 # ignore duckdb
 *.duckdb
 *.wal
+rest_api_pipeline.py
+scratchpad.py
+/downloads
