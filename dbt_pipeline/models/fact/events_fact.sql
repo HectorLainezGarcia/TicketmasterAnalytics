@@ -7,8 +7,9 @@ src_attractions AS  ( SELECT EVENT_DLT_ID, COUNT(ATTRACTION_ID) AS ATTRACTION_CO
 
 SELECT
 DISTINCT 
-{{ dbt_utils.generate_surrogate_key(['EVENT_ID', 'EVENT_STATUS','EVENT_START_DATE','EVENT_END_DATE']) }}    AS EVENT_KEY,
+{{ dbt_utils.generate_surrogate_key(['EVENT_ID', 'EVENT_STATUS','EVENT_START_DATE','EVENT_END_DATE','CLASSIFICATION_TYPE_ID']) }}    AS EVENT_KEY,
 {{ dbt_utils.generate_surrogate_key(['SEGMENT_ID', 'GENRE_ID','SUB_GENRE_ID']) }}                           AS CLASS_KEY,
+{{ dbt_utils.generate_surrogate_key(['VENUE_ID', 'VENUE_NAME']) }}                                          AS VENUE_KEY,
 EVENT_ID,
 EVENT_NAME,
 EVENT_STATUS,  
@@ -28,8 +29,8 @@ COALESCE(SUB_GENRE,'NA')                                                        
 COALESCE(SOURCE,'NA')                                                                                       AS SOURCE,
 COALESCE(EVENT_URL, 'NA')                                                                                   AS EVENT_URL,
 IS_HOT, 
-EVENT_START_DATE, 
-EVENT_END_DATE,
+COALESCE(EVENT_START_DATE, '9999-12-31')                                                                    AS EVENT_START_DATE, 
+COALESCE(EVENT_END_DATE, '9999-12-31')                                                                      AS EVENT_END_DATE,
 ONSALE_START_DATE,
 ONSALE_END_DATE,
 MIN_PRICE,

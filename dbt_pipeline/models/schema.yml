@@ -1,0 +1,36 @@
+models:
+  - name: event_attractions_fct
+    columns:
+       - name: EVENT_KEY  
+         data_tests:
+         - relationships:
+                to: ref('events_fact')
+                field: EVENT_KEY
+       - name: EVENT_CLASS_KEY  
+         data_tests:
+         - relationships:
+                to: ref('classification_dim')
+                field: CLASS_KEY
+       - name: ATTRACTION_KEY  
+         data_tests:
+         - relationships:
+                to: ref('attractions_dim')
+                field: ATTRACTION_KEY
+
+  - name: events_fact
+    columns:
+       - name: CLASS_KEY  
+         data_tests:
+         - relationships:
+                to: ref('classification_dim')
+                field: CLASS_KEY
+       - name: EVENT_START_DATE  
+         data_tests:
+         - relationships:
+                to: ref('date_dim')
+                field: DATE
+       - name: VENUE_KEY  
+         data_tests:
+         - relationships:
+                to: ref('venue_dim')
+                field: VENUE_KEY

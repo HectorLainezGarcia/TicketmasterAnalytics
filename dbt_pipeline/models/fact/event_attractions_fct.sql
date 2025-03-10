@@ -3,13 +3,13 @@ src_promoter    AS  ( SELECT EVENT_DLT_ID, COUNT(PROMOTER_ID) AS PROMOTER_COUNT 
 src_attractions AS  ( SELECT * FROM {{ ref('src_events_attractions') }})
 
 SELECT  
-{{ dbt_utils.generate_surrogate_key(['EVENT_ID', 'EVENT_STATUS','EVENT_START_DATE','EVENT_END_DATE']) }}        AS EVENT_KEY,
+{{ dbt_utils.generate_surrogate_key(['A.EVENT_ID', 'A.EVENT_STATUS','A.EVENT_START_DATE','A.EVENT_END_DATE','A.CLASSIFICATION_TYPE_ID']) }}        AS EVENT_KEY,
 {{ dbt_utils.generate_surrogate_key(['B.ATTRACTION_ID', 'B.ATTRACTION_NAME']) }}                                AS ATTRACTION_KEY,
 {{ dbt_utils.generate_surrogate_key(['A.SEGMENT_ID', 'A.GENRE_ID','A.SUB_GENRE_ID']) }}                         AS EVENT_CLASS_KEY,
 {{ dbt_utils.generate_surrogate_key(['B.SEGMENT_ID', 'B.GENRE_ID','B.SUB_GENRE_ID']) }}                         AS ATTRACTION_CLASS_KEY,
 {{ dbt_utils.generate_surrogate_key(['A.VENUE_ID', 'A.VENUE_NAME']) }}                                          AS VENUE_KEY,
-A.EVENT_NAME,
-B.ATTRACTION_NAME,
+A.EVENT_NAME                                                                                                    AS EVENT_NAME,
+B.ATTRACTION_NAME                                                                                               AS ATTRACTION_NAME,
 CASE WHEN C.PROMOTER_COUNT > 0 
     THEN 'Yes'
     ELSE 'No' 

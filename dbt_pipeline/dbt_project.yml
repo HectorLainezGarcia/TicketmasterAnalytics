@@ -44,7 +44,3 @@ models:
     fact:
       +materialized: table
       +schema: serving
-
-    serv:
-      +materialized: table
-      +schema: serving

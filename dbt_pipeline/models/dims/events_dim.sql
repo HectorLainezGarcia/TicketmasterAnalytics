@@ -7,7 +7,7 @@ src_attractions AS  ( SELECT EVENT_DLT_ID, COUNT(ATTRACTION_ID) AS ATTRACTION_CO
 
 SELECT
 DISTINCT 
-{{ dbt_utils.generate_surrogate_key(['EVENT_ID', 'EVENT_STATUS','EVENT_START_DATE','EVENT_END_DATE']) }}    AS EVENT_KEY,
+{{ dbt_utils.generate_surrogate_key(['EVENT_ID', 'EVENT_STATUS','EVENT_START_DATE','EVENT_END_DATE','CLASSIFICATION_TYPE_ID']) }}    AS EVENT_KEY,
 {{ dbt_utils.generate_surrogate_key(['SEGMENT_ID', 'GENRE_ID','SUB_GENRE_ID']) }}                           AS CLASS_KEY,
 EVENT_ID,
 EVENT_NAME,

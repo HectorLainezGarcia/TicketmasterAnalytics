@@ -1,4 +1,5 @@
-WITH src_attractions AS (SELECT * FROM {{ ref('src_events_attractions') }})
+WITH src_attractions AS (SELECT * FROM {{ ref('src_events_attractions') }}),
+null_record AS (SELECT NULL AS ATTRACTION_ID,NULL AS ATTRACTION_NAME,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL,NULL,NULL)
 
 SELECT 
 DISTINCT
@@ -19,3 +20,11 @@ DISTINCT
     CLASSIFICATION_SUB_TYPE_ID,
     CLASSIFICATION_SUB_TYPE
 FROM src_attractions
+
+UNION 
+
+SELECT 
+{{ dbt_utils.generate_surrogate_key(['ATTRACTION_ID', 'ATTRACTION_NAME']) }} AS ATTRACTION_KEY,
+'NA' AS ATTRACTION_ID,
+'NA' AS ATTRACTION_NAME,
+'NA','NA','NA','NA','NA','NA','NA', 'NA','NA','NA','NA','NA','NA' from null_record
