@@ -1,0 +1,8 @@
+WITH src_promoter AS (SELECT * FROM {{ ref('src_promoter') }})
+
+SELECT 
+DISTINCT
+    PROMOTER_ID,
+    PROMOTER_NAME,
+    COALESCE(PROMOTER_DESCRIPTION,'NA') AS PROMOTER__DESCRIPTION
+ FROM src_promoter

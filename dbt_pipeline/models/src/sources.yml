@@ -1,0 +1,16 @@
+sources:
+    - name: landing_historical
+      schema: landing_historical
+      tables:
+        - name: events_hist
+          identifier: events
+        - name: events_promotors
+          identifier: events__events__promoters
+        - name: events_atractions
+          identifier: events__events__attractions    
+    
+    - name: landing_incremental
+      schema: landing_incremental
+      tables:
+        - name: events_incr
+          identifier: events

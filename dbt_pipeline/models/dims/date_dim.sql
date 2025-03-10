@@ -1,0 +1,37 @@
+WITH stg_events_hist AS ( SELECT * FROM {{ source('landing_historical', 'events_hist') }}),
+DATE_RANGE AS ( SELECT MIN(EVENTS__EVENT_START_LOCAL_DATE) AS EVENT_START_DATE, MAX(EVENTS__EVENT_END_LOCAL_DATE) AS EVENT_END_DATE FROM stg_events_hist),
+NUM_DAYS AS ( SELECT DATEDIFF(DAYS,EVENT_START_DATE,EVENT_END_DATE) AS DAYS_AMOUNT FROM DATE_RANGE ),
+
+
+
+DATE_DIM AS  (
+SELECT
+    ROW_NUMBER() OVER( ORDER BY SEQ4()) -1 AS  DATE_DIM_ID
+    ,TO_DATE(DATEADD(DAY,DATE_DIM_ID, TO_DATE(B.EVENT_START_DATE))) AS DATE
+FROM
+     TABLE(GENERATOR(ROWCOUNT => 4555)), DATE_RANGE B
+)
+    SELECT CONCAT(DATE_DIM_ID+10,YEAR(DATE),TO_CHAR(DATE,'MM'),TO_CHAR(DATE,'DD')) AS DATE_SK
+        , DATE
+        , DECODE(DAYNAME(DATE),
+                 'Mon','Monday', 
+                 'Tue','Tuesday', 
+                 'Wed', 'Wednesday', 
+                 'Thu','Thursday',
+                 'Fri', 'Friday', 
+                 'Sat','Saturday', 
+                 'Sun', 'Sunday')  AS DAY_NAME
+        , DAYNAME(DATE) AS DAY_NAME_ABV
+        , DAYOFWEEK(DATE) DAY_OF_WEEK
+        , MONTH(DATE) AS MONTH_NUM
+        , CONCAT(YEAR(DATE),TO_CHAR(DATE,'MM')) AS MONTH_ID
+        , TO_CHAR(DATE,'MMMM') AS MONTH_NAME
+        , MONTHNAME(DATE) AS MONTH_NAME_ABV
+        , DATEADD(DAY, 1,LAST_DAY( DATEADD(MONTH,-1,DATE),MONTH)) as First_Day_Month
+        , LAST_DAY(DATE, MONTH) LAST_DAY_MONTH
+        , QUARTER(DATE) AS QUARTER_NUM
+        , CONCAT(YEAR(DATE),'Q',QUARTER(DATE)) AS QUARTER_ID
+        , DATEADD(DAY, 1,LAST_DAY( DATEADD(QUARTER,-1,DATE),QUARTER)) as FIRST_DAY_QUARTER
+        , LAST_DAY(DATE,QUARTER) AS LAST_DAY_QUARTER
+        , YEAR(DATE) AS YEAR
+         FROM DATE_DIM
